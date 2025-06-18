@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categories | Digital Product Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #0055aa;
+      --secondary: #ffcc00;
+      --dark: #333;
+      --light: #f9f9f9;
+      --gray: #e0e0e0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--light);
+      color: var(--dark);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--secondary);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a.active {
+      color: var(--secondary);
+    }
+
+    nav a.active::after {
+      width: 100%;
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0,85,170,0.8), rgba(0,85,170,0.8)), 
+                  url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: white;
+      padding: 5rem 1rem;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .categories-container {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .category-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .category-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .category-info h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .category-count {
+      color: #777;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-description {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      color: #555;
+      flex: 1;
+    }
+
+    .explore-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+
+    .explore-btn:hover {
+      background: #004488;
+    }
+
+    .featured-products {
+      background: var(--gray);
+      padding: 4rem 1rem;
+    }
+
+    .featured-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--secondary);
+    }
+
+    .products-slider {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-mini-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .product-mini-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-mini-image {
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .product-mini-info {
+      padding: 1rem;
+    }
+
+    .product-mini-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-mini-price {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .footer-column h3 {
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-column ul li a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-column ul li a:hover {
+      color: white;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-links a {
+      color: white;
+      background: rgba(255,255,255,0.1);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--secondary);
+      color: black;
+    }
+
+    .copyright {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+      }
+      
+      nav {
+        margin-top: 1rem;
+      }
+      
+      nav a {
+        margin: 0 0.5rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+      }
+      
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>Digital Product Store</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html" class="active">Categories</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <h1>Browse Our Categories</h1>
+    <p>Discover digital products organized by category to find exactly what you need</p>
+  </section>
+
+  <div class="categories-container">
+    <div class="categories-grid">
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80');"></div>
+        <div class="category-info">
+          <h2>Study Materials</h2>
+          <div class="category-count">42 products</div>
+          <p class="category-description">Comprehensive study guides, lecture notes, and exam preparation materials for various academic subjects and professional certifications.</p>
+          <a href="products.html?category=study" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="category-info">
+          <h2>Templates</h2>
+          <div class="category-count">35 products</div>
+          <p class="category-description">Professional templates for resumes, presentations, business plans, and more to help you create polished documents quickly.</p>
+          <a href="products.html?category=templates" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80');"></div>
+        <div class="category-info">
+          <h2>eBooks</h2>
+          <div class="category-count">28 products</div>
+          <p class="category-description">Educational eBooks covering various topics from academic subjects to personal development and professional skills.</p>
+          <a href="products.html?category=ebooks" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');"></div>
+        <div class="category-info">
+          <h2>Planners</h2>
+          <div class="category-count">19 products</div>
+          <p class="category-description">Digital planners, productivity tools, and organizers to help you manage your time and achieve your goals.</p>
+          <a href="products.html?category=planners" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="category-info">
+          <h2>Courses</h2>
+          <div class="category-count">15 products</div>
+          <p class="category-description">In-depth video courses and tutorials on various topics from programming to creative skills and business strategies.</p>
+          <a href="products.html?category=courses" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+
+      <div class="category-card">
+        <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1115&q=80');"></div>
+        <div class="category-info">
+          <h2>Software Tools</h2>
+          <div class="category-count">23 products</div>
+          <p class="category-description">Digital tools, plugins, and software to enhance your productivity and workflow across various platforms.</p>
+          <a href="products.html?category=software" class="explore-btn">Explore Category</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="featured-products">
+    <div class="featured-container">
+      <h2 class="section-title">Featured Products</h2>
+      <div class="products-slider">
+        <div class="product-mini-card">
+          <div class="product-mini-image" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80');"></div>
+          <div class="product-mini-info">
+            <h3>Ultimate Study Guide Bundle</h3>
+            <div class="product-mini-price">$29.99</div>
+          </div>
+        </div>
+        
+        <div class="product-mini-card">
+          <div class="product-mini-image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+          <div class="product-mini-info">
+            <h3>Professional Resume Templates</h3>
+            <div class="product-mini-price">$19.99</div>
+          </div>
+        </div>
+        
+        <div class="product-mini-card">
+          <div class="product-mini-image" style="background-image: url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');"></div>
+          <div class="product-mini-info">
+            <h3>Productivity Planner Pro</h3>
+            <div class="product-mini-price">$14.99</div>
+          </div>
+        </div>
+        
+        <div class="product-mini-card">
+          <div class="product-mini-image" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+          <div class="product-mini-info">
+            <h3>JavaScript Masterclass</h3>
+            <div class="product-mini-price">$79.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>Digital Product Store</h3>
+        <p>Your one-stop shop for premium digital resources to enhance learning and productivity.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Help & Support</h3>
+        <ul>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Returns & Refunds</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Contact Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2023 Digital Product Store. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Simple script to enhance interactivity
+    document.querySelectorAll('.category-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Don't navigate if clicking on the button (let button handle its own click)
+        if (!e.target.classList.contains('explore-btn') && e.target.tagName !== 'A') {
+          const link = this.querySelector('.explore-btn');
+          if (link) {
+            window.location.href = link.href;
+          }
+        }
+      });
+    });
+
+    // Add hover class to body for cursor changes
+    document.querySelectorAll('.category-card, .product-mini-card').forEach(element => {
+      element.addEventListener('mouseenter', () => {
+        document.body.classList.add('hover-card');
+      });
+      element.addEventListener('mouseleave', () => {
+        document.body.classList.remove('hover-card');
+      });
+    });
+  </script>
+</body>
+</html>

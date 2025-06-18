@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Products | Digital Product Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #0055aa;
+      --secondary: #ffcc00;
+      --dark: #333;
+      --light: #f9f9f9;
+      --gray: #e0e0e0;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--light);
+      color: var(--dark);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    nav a {
+      color: white;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--secondary);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--secondary);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0,85,170,0.8), rgba(0,85,170,0.8)), 
+                  url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: white;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .filter-bar {
+      background: white;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      max-width: 1200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 2.5rem;
+      border: 1px solid var(--gray);
+      border-radius: 50px;
+      font-size: 1rem;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .filter-group select {
+      padding: 0.8rem;
+      border: 1px solid var(--gray);
+      border-radius: 5px;
+      background: white;
+      cursor: pointer;
+    }
+
+    #product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .product-image {
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--secondary);
+      color: black;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-info h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .product-category {
+      color: #777;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-description {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: #555;
+      flex: 1;
+    }
+
+    .product-price {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .product-price .original {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 1rem;
+      margin-right: 0.5rem;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .add-to-cart {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      flex: 1;
+    }
+
+    .add-to-cart:hover {
+      background: #004488;
+    }
+
+    .wishlist {
+      background: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      width: 45px;
+      height: 45px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .wishlist:hover {
+      background: #f0f0f0;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 3rem 0;
+    }
+
+    .pagination button {
+      background: white;
+      border: 1px solid var(--gray);
+      color: var(--dark);
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .pagination button:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .pagination button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        min-width: 100%;
+      }
+      
+      .filter-group {
+        width: 100%;
+      }
+      
+      .filter-group select {
+        width: 100%;
+      }
+      
+      #product-list {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <h1>Digital Product Store</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html" class="active">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <h1>Our Digital Products</h1>
+    <p>Browse our collection of premium digital resources designed to boost your productivity and learning</p>
+  </section>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search products..." id="search-input">
+    </div>
+    
+    <div class="filter-group">
+      <label for="category-filter">Category:</label>
+      <select id="category-filter">
+        <option value="all">All Categories</option>
+        <option value="study">Study Materials</option>
+        <option value="templates">Templates</option>
+        <option value="ebooks">eBooks</option>
+        <option value="courses">Courses</option>
+      </select>
+    </div>
+    
+    <div class="filter-group">
+      <label for="sort-by">Sort by:</label>
+      <select id="sort-by">
+        <option value="popular">Most Popular</option>
+        <option value="newest">Newest First</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <main id="product-list">
+    <!-- Products will be loaded here by JavaScript -->
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80');">
+        <span class="product-badge">Bestseller</span>
+      </div>
+      <div class="product-info">
+        <h3>Ultimate Study Guide Bundle</h3>
+        <span class="product-category">Study Materials</span>
+        <p class="product-description">Comprehensive collection of study materials for all major subjects with detailed explanations.</p>
+        <div class="product-price">
+          <span class="original">$49.99</span>
+          $29.99
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');">
+        <span class="product-badge">New</span>
+      </div>
+      <div class="product-info">
+        <h3>Professional Resume Templates</h3>
+        <span class="product-category">Templates</span>
+        <p class="product-description">50+ customizable resume templates designed by HR professionals to help you stand out.</p>
+        <div class="product-price">$19.99</div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');">
+        <span class="product-badge">Sale</span>
+      </div>
+      <div class="product-info">
+        <h3>Productivity Planner Pro</h3>
+        <span class="product-category">Planners</span>
+        <p class="product-description">Digital planner with time management tools, habit trackers, and productivity templates.</p>
+        <div class="product-price">
+          <span class="original">$24.99</span>
+          $14.99
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+      <div class="product-info">
+        <h3>JavaScript Masterclass</h3>
+        <span class="product-category">Courses</span>
+        <p class="product-description">Comprehensive JavaScript course covering ES6+, React, Node.js and advanced concepts.</p>
+        <div class="product-price">$79.99</div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1546074177-ffdda98d214f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80');"></div>
+      <div class="product-info">
+        <h3>Academic Writing Guide</h3>
+        <span class="product-category">eBooks</span>
+        <p class="product-description">Master academic writing with this comprehensive guide to essays, papers, and research.</p>
+        <div class="product-price">$12.99</div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="product-card">
+      <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1115&q=80');">
+        <span class="product-badge">New</span>
+      </div>
+      <div class="product-info">
+        <h3>Business Analytics Toolkit</h3>
+        <span class="product-category">Templates</span>
+        <p class="product-description">Complete set of Excel templates for business analytics, financial modeling, and data visualization.</p>
+        <div class="product-price">$34.99</div>
+        <div class="product-actions">
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="wishlist"><i class="far fa-heart"></i></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="pagination">
+    <button><i class="fas fa-chevron-left"></i></button>
+    <button class="active">1</button>
+    <button>2</button>
+    <button>3</button>
+    <button><i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>Digital Product Store</h3>
+        <p>Your one-stop shop for premium digital resources to enhance learning and productivity.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3>Help & Support</h3>
+        <ul>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Shipping Policy</a></li>
+          <li><a href="#">Returns & Refunds</a></li>
+          <li><a href="#">Track Order</a></li>
+          <li><a href="#">Contact Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; 2023 Digital Product Store. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Sample JavaScript for product filtering (would be expanded in a real implementation)
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+      filterProducts();
+    });
+    
+    document.getElementById('category-filter').addEventListener('change', filterProducts);
+    document.getElementById('sort-by').addEventListener('change', filterProducts);
+    
+    function filterProducts() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const category = document.getElementById('category-filter').value;
+      const sortBy = document.getElementById('sort-by').value;
+      
+      // In a real implementation, this would filter actual product data
+      console.log(`Filtering by: Search=${searchTerm}, Category=${category}, Sort=${sortBy}`);
+      
+      // This is where you would typically make an AJAX call or filter client-side data
+      // For now, we're just logging the filter values
+    }
+    
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+      button.addEventListener('click', function() {
+        const productCard = this.closest('.product-card');
+        const productName = productCard.querySelector('h3').textContent;
+        alert(`${productName} added to cart!`);
+      });
+    });
+    
+    // Wishlist functionality
+    document.querySelectorAll('.wishlist').forEach(button => {
+      button.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('far')) {
+          icon.classList.remove('far');
+          icon.classList.add('fas');
+          this.style.color = 'red';
+          this.style.borderColor = 'red';
+        } else {
+          icon.classList.remove('fas');
+          icon.classList.add('far');
+          this.style.color = '';
+          this.style.borderColor = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

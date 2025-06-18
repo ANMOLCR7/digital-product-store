@@ -1,0 +1,26 @@
+[
+  {
+    "id": "notes001",
+    "title": "Complete Class 12 Notes",
+    "description": "Comprehensive notes for Class 12, all subjects included.",
+    "price": 200,
+    "image": "/assets/class12-notes.png",
+    "file": "downloads/class12-notes.pdf"
+  },
+  {
+    "id": "template001",
+    "title": "Professional Resume Template",
+    "description": "Clean and professional resume template for job applications.",
+    "price": 100,
+    "image": "/assets/resume-template.png",
+    "file": "downloads/resume-template.pdf"
+  },
+  {
+    "id": "ebook001",
+    "title": "Programming Fundamentals eBook",
+    "description": "Learn programming basics with this beginner-friendly eBook.",
+    "price": 250,
+    "image": "/assets/programming-ebook.png",
+    "file": "downloads/programming-ebook.pdf"
+  }
+]
